@@ -162,3 +162,156 @@ println("$s.length is ${s.length}") // "abc.length is 3"
 val s = "${'$'}9.99" // "$9.99"
 ```
 
+## Packages
+源文件以包声明开头。
+```kotlin
+package org.example
+
+fun printMessage() { /*...*/ }
+class Message { /*..*/ }
+
+// ...
+```
+源文件的所有内容(比如上面的class和函数)被这个包声明持有。所以在上面的例子中，printMessage()的全称为org.example.printMessage，Message类的全称为org.example.Message。
+如果没有指定包，文件内容归属于没有名字的默认包。
+### Default Imports
+许多包在每个kotlin文件中被默认导入。
+- kotlin.*
+- kotlin.annotation.*
+- ...
+
+### Imports 
+除了默认导入(import)，每个文件可以拥有自己的导入指令。
+
+```kotlin
+import org.example.Message // Message is now accessible without qualification.
+import org.example.* // every thing in "org.example.*" is now accessible.
+import org.test.Message as testMessage // testMessage stands for 'org.test.Message'
+```
+import关键字不局限于导入类，可以用它来导入其它声明：
+- 文件顶层的函数以及属性(top-level functions and properties)
+- 在对象里声明的函数以及属性(function and properties declared in object declaration)
+- enum constants
+### Visibility of Top-level Declarations
+If a top-level declaration is marked private, it is private to the file it's declared in
+
+## Control Flow: if, when, for, while
+### If Expression
+在Kotlin中，if是一个表达式(expression)，它返回一个值。因此没有类似于C语言的三元操作符（condition? then : else），因为在这种情况下if能够充当这种角色。
+```kotlin
+// Traditional usage
+var max = a
+if (a < b) max = b
+
+// with else
+var max: Int
+if (a > b) {
+  max = a
+} else {
+  max = b
+}
+
+// As Expression
+val max = if (a > b) a else b
+```
+如果if分支可以是代码块，这时候代码块最后一个表达式的值就是if表达式的值。
+```kotlin
+val max = if (a > b) {
+  println("choose a")
+  a
+} else {
+  println("choose b")
+  b
+}
+```
+如果你将if用作为表达式(expression)而不是语句(statement)，那么表达式需要有else分支。
+### When Expression
+when语句取代类C语言的switch操作符。
+```
+when (x) {
+  1 -> print("x == 1")
+  2 -> print("x == 2")
+  else -> { 
+      // Note the block
+      print("x is neither 1 nor 2")
+  }
+}
+```
+when按顺序匹配所有分支，直到满足某个分支的条件，执行这个分支的代码。
+when可以被用作表达式或者语句。如果它被用做表达式，符合条件的分支的值会被作为整个表达式的值。If it is used as a statement, the values of individual branches are ignored.(就像if那样，每个分支可以是代码块，其值是代码块最后一个表达式的值)
+当其它分支的条件都不能被满足时，else分支会被执行。当when被用作表达式，else分支是必需的，除非编译器可以证明所有可能的情况完全被分支的条件满足。
+如果多种条件应该以相同的方式处理，这些条件应当通过逗号进行组合。
+```kotlin
+when (x) {
+  1, 2 -> print("x == 1 or x == 2")
+  else -> print("otherwise")
+}
+```
+可以使用任意表达式作为分支条件（不仅是常量）。
+```kotlin
+when (x) {
+  parseInt(s) -> print("s encodes x")
+  else -> print("s does not encode x")
+}
+```
+同样可以检查一个值是否属于一个范围或者集合。
+```kotlin
+when (x) {
+  in 1..10 -> print("x is in the range")
+  in validNumbers -> print("x is valid")
+  !in 10..20 -> print("x is outside the range")
+  else -> print("none of the above")
+}
+```
+另外可以检查一个值 is or !is 一种特定的类型。值得一提的是，由于smart casts，你可以访问类型的方法或者属性而不需要额外检查。
+```kotlin
+fun hasPrefix(x: Any) = when(x) {
+  is String -> x.startWith("prefix")
+  else false
+}
+```
+when也可以用来取代if-else-if链。如果when没有参数提供，分支条件为简单的bool表达式，当条件为true时分支代码将会被执行。
+```kotlin
+when {
+  x.isOdd() -> print("x is odd")
+  y.isEven() -> print("y is even")
+  else -> print("x + y is even")
+}
+```
+### For Loops
+for循环对提供迭代器(iterator)的任何东西进行迭代(iterate)。相当于C#语言中的foreach循环。其语法如下：
+```kotlin
+for (item in collection) print(item)
+```
+body可以是代码块
+```kotlin
+for (item in collection) {
+  print(item)
+}
+```
+如何定义迭代器？// TODO
+迭代数字使用range expression
+```kotlin
+for (i in 1..3) {
+  println(i)
+}
+for (i in 6 downTo 0 setp 2) {
+  println(i)
+}
+```
+一个遍历range或者数组的for循环会被编译成基于index的循环，并不会创建iterator object。
+遍历数组index
+```kotlin
+for (i in array.indices) {
+  println(array[i])
+}
+``
+另外，使用withIndex库函数
+```kotlin
+for ((index, value) in array.withIndex()) {
+  println("the element at $index is $value")
+}
+### While Loops
+while和do..while与Java并无二异。
+### Break and continue in loops。
+break和continue与Java并无二异。
