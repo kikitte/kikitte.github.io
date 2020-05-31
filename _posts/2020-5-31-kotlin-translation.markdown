@@ -315,3 +315,71 @@ for ((index, value) in array.withIndex()) {
 while和do..while与Java并无二异。
 ### Break and continue in loops。
 break和continue与Java并无二异。
+
+## Returns and jumps
+kotlin有三种结构转跳表达式
+- return：默认情况下从最近的封闭函数或者匿名函数退出
+- break：从最近的封闭循环退出
+- continue：从最近的封闭循环进行下一个步骤
+
+### Break and Continue labels
+任何kotlin表达式可以通过label进行标记。Label的表达形式：identifer@ ，例如abc@，fooBar@都是有效的label。标记表达式只需要将label放到表达式前。如，
+```kotlin
+loop@ for (i in 1..100) {
+  // ...
+}
+```
+现在我们使得从label对应的表达式中退出。
+```kotlin
+loop@ for (i in 1...100) {
+  for (j in 1..100) {
+    if (...) break@loop
+  }
+}
+```
+### Return at Labels
+```kotlin
+return只会从最近的闭合函数或者匿名函数中退出。
+fun foo() {
+  // forEach使用了lambda表达式，因此return会使得foo退出
+    listOf(1, 2, 3, 4, 5).forEach {
+        if (it == 3) return // non-local return directly to the caller of foo()
+        print(it)
+    }
+    println("this point is unreachable")
+}
+// 输出：1, 2
+
+// 要想从lambda表达式中退出，给表达式添加label，在表达式内部调用return@identifier
+fun foo() {
+    listOf(1, 2, 3, 4, 5).forEach lit@{
+        if (it == 3) return@lit // local return to the caller of the lambda, i.e. the forEach loop
+        print(it)
+    }
+    print(" done with explicit label")
+}
+// 输出：1, 2, 4, 5
+
+
+fun foo() {
+  // 或者直接使用implicit label
+    listOf(1, 2, 3, 4, 5).forEach {
+        if (it == 3) return@forEach // local return to the caller of the lambda, i.e. the forEach loop
+        print(it)
+    }
+    print(" done with implicit label")
+}
+
+// 匿名函数内部调用return直接从匿名函数退出。
+fun foo() {
+    listOf(1, 2, 3, 4, 5).forEach(fun(value: Int) {
+        if (value == 3) return  // local return to the caller of the anonymous fun, i.e. the forEach loop
+        print(value)
+    })
+    print(" done with anonymous function")
+}
+
+返回一个值的例子
+```kotlin
+return@a 1 // means "return 1" at label @a
+```
