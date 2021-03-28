@@ -2,7 +2,7 @@
 layout: post
 title:  "HTTPS、SSL、Certificate Authority 概念、认知、创建自己的CertificateAuthority"
 date:   2020-05-09 10:18:50 +0800
-categories: jekyll update
+categories: web
 ---
 
 ### 基础知识

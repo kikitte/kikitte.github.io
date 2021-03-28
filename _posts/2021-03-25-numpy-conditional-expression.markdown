@@ -1,3 +1,10 @@
+---
+layout: post
+title:  "Numpy条件表达式的一种实现方法"
+date:   2021-03-25 10:18:50 +0800
+categories: geographic
+---
+
 ### Numpy条件表达式的一种实现方法
 
 - 目的
