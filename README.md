@@ -18,4 +18,4 @@
 
 - ### 数据库
 
-  [记录Archlinux安装MariaDB记录](/database/2020/05/16/mariadb-install-thoughts.html)
+  - [记录Archlinux安装MariaDB记录](/database/2020/05/16/mariadb-install-thoughts.html)
