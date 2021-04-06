@@ -1,0 +1,30 @@
+---
+layout: post
+title:  "Docker的简单概念"
+date:   2021-03-25 10:18:50 +0800
+categories: os
+---
+
+参考：https://docker-curriculum.com/
+
+- Images
+
+  镜像是我们应用程序的蓝图，他是容器的基本组成部分。
+
+- Containers
+
+  容器由Docker镜像创建并且运行实际的应用程序。
+
+- Docker Daemon
+
+  Docker守护进程是运行在主机(host)上的后台服务，管理Docker镜像构建、运行以及容器分发。
+
+- Docker Client
+
+  可以是命令行工具，也可以是图形化界面。它允许用户与Docker守护进程进行通信。
+
+- Docker Hub
+
+  A [registry](https://hub.docker.com/explore/) of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.
+
+- 
