@@ -1,0 +1,50 @@
+---
+layout: post
+title:  "nginx reverse proxy"
+date:  2021-05-25 23:30:52 +0800
+categories: web
+---
+
+1. What is a reverse proxy server ?
+
+   什么是反向代理服务器？
+
+   代理服务器是互联网上多个客户端和多个服务器之间传递携带内容的网络请求的中介。通常反向代理服务器运行于防火墙和私有网络之外用来将客户端请求传递至正确的后台服务器。
+
+2. http url结构
+
+   参考：https://developer.mozilla.org/zh-CN/docs/Learn/Common_questions/What_is_a_URL
+
+   通常http url有协议(scheme)、认证机构(Authority)：Domain Name or IP Address、Port、资源路径(path to resource)、、Parameters、Anchor()、
+
+   ![full  url](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL/mdn-url-all.png)
+
+   Anchor # 符号后面的被成为fragment identifier
+   
+3. 使用location匹配path接着使用proxy_pass进行转发
+
+   根据nginx文档对于location功能的描述：
+
+   > Sets configuration depending on a request URI.
+   >
+   > The matching is performed against a normalized URI, after decoding the text encoded in the “`%XX`” form, resolving references to relative path components “`.`” and “`..`”, and possible[compression](#merge_slashes) of two or more adjacent slashes into a single slash.
+
+   意为：对不同请求URI（http url中的path部分）设定不同配置。在匹配之前会对uri进行归一化(normalized)：解码 "$%%"形式的文本、解析相对路径'.' 和 '..'、将两个或者更多的slash（/）压缩成一个。
+
+    
+
+   nginx文档对于proxy_pass的功能描述为：
+
+   > Sets the protocol and address of a proxied server and an optional URI to which a location should be mapped.
+
+   设定location匹配的uri应当被映射到的 代理服务器的协议和地址(地址的URI可选)
+
+    
+
+   一个例子，访问路径/name/a将会导致该请求转发到http://127.0.0.1/remote/a，其中注意到name被替换为remote，这是实现细节，更多细节可以查看文档。
+
+   ```nginx
+   location /name/ {
+       proxy_pass http://127.0.0.1/remote/;
+   }
+   ```
